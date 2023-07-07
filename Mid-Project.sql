@@ -17,9 +17,8 @@ FROM staff;
 SELECT *
 FROM inventory;
 
-SELECT 
-	COUNT(CASE WHEN store_id = 1 THEN inventory_id ELSE NULL END) AS 'store_1',
-    COUNT(CASE WHEN store_id = 2 THEN inventory_id ELSE NULL END) AS 'store_2'
+SELECT store_id,
+	COUNT(inventory_id) AS 'total_inventory'
 FROM inventory
 GROUP BY store_id;
 
@@ -31,8 +30,16 @@ FROM customer;
 
 SELECT 
 	store_id,
-	COUNT(active = 1) AS 'total_active_status'
+	COUNT(active) AS 'total_active_status'
 FROM customer
+WHERE active = 1
+GROUP BY store_id;
+
+-- other solution
+SELECT store_id,
+		COUNT(customer_id) AS 'total_active_customer'
+FROM customer
+WHERE active=1
 GROUP BY store_id;
 
 -- NUMBER 4
@@ -58,25 +65,20 @@ count of unique film  	200     400
 SELECT *
 FROM inventory;
 
-SELECT DISTINCT
-	store_id
-FROM inventory;
-
-SELECT DISTINCT
-	film_id, inventory_id -- not works as I expected. it supposed to return 223 film_id but I got 958. Haven't covered up what's wrong 
-FROM inventory;
-
-SELECT film_id,
-	COUNT(CASE WHEN store_id = 1 THEN film_id ELSE NULL END) AS store_1,
-	COUNT(CASE WHEN store_id = 2 THEN film_id ELSE NULL END) AS store_2
+SELECT 
+	COUNT(DISTINCT film_id) AS 'total_inventory', store_id
 FROM inventory
-GROUP BY film_id;
+GROUP BY store_id;
 
+SELECT *
+FROM category;
 
-SELECT
-	SUM(store_1) AS 'total store 1',
-	SUM(store_2) AS 'total store 2'
-FROM iventory;
+SELECT COUNT(DISTINCT name) AS 'film_category'
+FROM category;
+
+-- if you want to show the category list name then:
+SELECT DISTINCT name
+FROM category;
     
 -- NUMBER 6
 /*We would like to understand the replacement cost of your films. Please provide the replacement cost for the
